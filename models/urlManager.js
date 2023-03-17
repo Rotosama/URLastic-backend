@@ -3,21 +3,18 @@ const urlSchema = require("../schemas/urls");
 const Shortener = require("link-shortener");
 
 class urlManager {
-    static findOriginalUrl = async (url) => {
+    static getAllUrls = async () => {
         dbClient();
-        const result = await urlSchema.findOne({ originalUrl: url });
+        const result = await urlSchema.find({});
         return result;
     };
 
-    static findShortUrl = async (url) => {
+    static findUrlById = async (requestedId) => {
         dbClient();
-        const result = await urlSchema.findOne({ shortenUrl: url });
-        return result;
-    };
-
-    static findUrlsByUser = async (requestedUserId) => {
-        dbClient();
-        const result = await urlSchema.findOne({ $where: requestedUserId });
+        const result = urlSchema.findOne({ _id: requestedId });
+        if (!result) {
+            return null;
+        }
         return result;
     };
 
@@ -26,7 +23,7 @@ class urlManager {
         const shortUrl = await Shortener.Shorten(url);
         const result = await urlSchema.create({
             originalUrl: url,
-            shortenUrl: shortUrl,                                         
+            shortenUrl: shortUrl,
             user: userId,
         });
         if (!result) {
@@ -36,13 +33,21 @@ class urlManager {
         return result;
     };
 
-    static modifyUrl = async (urlId, modifiedUrl) => {
+    static modifyUrl = async (urlId, customUrl) => {
         dbClient();
+        const result = await urlSchema.updateOne(
+            { _id: urlId },
+            { shortenUrl: customUrl }
+        );
+        console.log(result);
+        return result;
+    };
 
-        const result = await urlSchema.findByIdAndUpdate(urlId, {
-            shortenUrl: modifiedUrl,
-        });
-
+    static deleteUrl = async (urlId) => {
+        dbClient();
+        const result = await urlSchema.deleteOne({ _id: urlId });
+        console.log(result);
+        return result;
     };
 }
 

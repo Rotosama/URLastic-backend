@@ -11,8 +11,7 @@ const urlSchema = new Schema({
         type: String,
         trim: true,
     },
-    user: String
+    user: String,
 });
 
-module.exports = mongoose.model('url', urlSchema);
-
+module.exports = mongoose.model("url", urlSchema);

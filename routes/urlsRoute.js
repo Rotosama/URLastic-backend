@@ -4,10 +4,10 @@ const urlController = require('../controllers/urlController');
 const jwtVerify = require("../middleware/jwtVerify");
 
 
-/* router.get("/", urlController.getAllUrl); */
-router.get("/:id", urlController.getUrl);
+router.get("/", urlController.getAllUrl);
+router.get("/:id", urlController.getUrlById);
 router.post("/", jwtVerify, urlController.newShortUrl);
-/* router.patch("/:id", urlController.updateUrl);
-router.delete("/:id", urlController.deleteUrl); */
+router.patch("/:id", jwtVerify, urlController.updateUrl);
+router.delete("/:id", jwtVerify, urlController.deleteUrl);
 
 module.exports = router;

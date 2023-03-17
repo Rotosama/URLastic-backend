@@ -25,9 +25,11 @@ const userSchema = new Schema({
         lowercase: true,
         required: (true, "Write a valid email."),
     },
-    password: String,
-    phone: Number,
-    birthDate: Date,
+    password: {
+        type: String,
+        trim: true,
+        required: (true, "Write a password."),
+    }
     
 });
 
