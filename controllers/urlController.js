@@ -55,10 +55,36 @@ const updateUrl = async (req, res) => {
 		return res.status(500).send();
 	}
 };
+
+const redirectUrl = async (req, res) => {
+	const shortUrl = req.params.shortUrl;
+	try {
+		const url = await urlManager.findUrlByShortUrl(shortUrl);
+		if (url) {
+			return res.redirect(url.originalUrl);
+		} else {
+			return res.status(404).send("URL not found");
+		}
+	} catch (error) {
+		console.error("Error fetching the original URL:", error);
+		return res.status(500).send("Internal Server Error");
+	}
+};
+
+module.exports = {
+	getAllUrl,
+	getUrlById,
+	newShortUrl,
+	updateUrl,
+	deleteUrl,
+	redirectUrl, // Exporta el método redirectUrl
+};
+
 module.exports = {
 	getAllUrl,
 	newShortUrl,
 	updateUrl,
 	deleteUrl,
 	getUrlById,
+	redirectUrl,
 };

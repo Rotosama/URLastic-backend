@@ -3,6 +3,11 @@ const urlSchema = require("../schemas/urls");
 const Shortener = require("link-shortener");
 
 class urlManager {
+	static async findUrlByShortUrl(shortUrl) {
+		dbClient();
+		const result = await urlSchema.findOne({ shortenUrl: shortUrl });
+		return result;
+	}
 	static getAllUrls = async () => {
 		dbClient();
 		const result = await urlSchema.find({});
@@ -20,7 +25,7 @@ class urlManager {
 	static generateShortUrl = () => {
 		const characters =
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		let shortUrl = "https://URLastic.com/";
+		let shortUrl = "";
 		for (let i = 0; i < 8; i++) {
 			shortUrl += characters.charAt(
 				Math.floor(Math.random() * characters.length)
