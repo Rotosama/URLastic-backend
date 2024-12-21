@@ -73,15 +73,6 @@ const redirectUrl = async (req, res) => {
 
 module.exports = {
 	getAllUrl,
-	getUrlById,
-	newShortUrl,
-	updateUrl,
-	deleteUrl,
-	redirectUrl, // Exporta el método redirectUrl
-};
-
-module.exports = {
-	getAllUrl,
 	newShortUrl,
 	updateUrl,
 	deleteUrl,
