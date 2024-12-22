@@ -61,7 +61,7 @@ const redirectUrl = async (req, res) => {
 	try {
 		const url = await urlManager.findUrlByShortUrl(shortUrl);
 		if (url) {
-			return res.redirect(url.originalUrl);
+			return res.status(301).redirect(url.originalUrl);
 		} else {
 			return res.status(404).send("URL not found");
 		}
