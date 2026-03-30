@@ -13,6 +13,10 @@ const urlSchema = new Schema(
 			trim: true,
 		},
 		user: String,
+		clicks: {
+			type: Number,
+			default: 0,
+		},
 	},
 	{ timestamps: true }
 );

@@ -22,7 +22,7 @@ const getAllUrl = async (req, res) => {
 
 const newShortUrl = async (req, res) => {
 	const newUrl = req.body.originalUrl;
-	const userId = req.user.userId;
+	const userId = req.user?.userId ?? null;
 	try {
 		const result = await urlManager.createUrl(newUrl, userId);
 		return res.status(201).json(result);
@@ -47,9 +47,13 @@ const deleteUrl = async (req, res) => {
 const updateUrl = async (req, res) => {
 	const customUrl = req.body.customURL;
 	const urlId = req.params.id;
+	const validFormat = /^[a-zA-Z0-9-]{3,30}$/;
+	if (!customUrl || !validFormat.test(customUrl)) {
+		return res.status(400).json({ error: "Invalid custom URL format. Use 3-30 characters: letters, numbers and hyphens only." });
+	}
 	try {
 		const result = await urlManager.modifyUrl(urlId, customUrl);
-		return res.status(201).json(result);
+		return res.status(200).json(result);
 	} catch (error) {
 		console.error(error);
 		return res.status(500).send();
@@ -61,7 +65,8 @@ const redirectUrl = async (req, res) => {
 	try {
 		const url = await urlManager.findUrlByShortUrl(shortUrl);
 		if (url) {
-			return res.status(301).redirect(url.originalUrl);
+			await urlManager.incrementClicks(shortUrl);
+			return res.status(302).redirect(url.originalUrl);
 		} else {
 			return res.status(404).send("URL not found");
 		}
